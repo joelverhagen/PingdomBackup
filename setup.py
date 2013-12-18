@@ -18,6 +18,7 @@ setup(
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
-        'Topic :: System :: Monitoring'
+        'Topic :: System :: Monitoring',
+        'Programming Language :: Python :: 3',
     ]
 )
