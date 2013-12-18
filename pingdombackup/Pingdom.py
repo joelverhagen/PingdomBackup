@@ -1,5 +1,7 @@
 import requests
+from urllib.parse import urlencode
 from requests.auth import HTTPBasicAuth
+
 
 from .log import log
 
@@ -13,12 +15,11 @@ class Pingdom:
     def api(self, method, endpoint, params=None, data=None):
         url = 'https://api.pingdom.com/api/{0}/{1}'.format(self.version, endpoint)
 
-        import urllib.parse
         if params is not None:
-            encoded_params = '?' + urllib.parse.urlencode(params)
+            encoded_params = '?' + urlencode(params)
         else:
             encoded_params = ''
-        log.debug('Pingdom: GET ' + url + encoded_params)
+        log.debug('Pingdom: {0} {1}{2}'.format(method, url, encoded_params))
 
         resp = requests.request(method, url,
             auth=HTTPBasicAuth(self.email, self.password),
