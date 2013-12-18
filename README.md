@@ -49,6 +49,8 @@ optional arguments:
 
 ## Script Usage
 
+### Updating the database
+
 This example does four things:
 
 1. Updates the `probes` table (which is a persisted record of the `/probes` endpoint).
@@ -72,7 +74,9 @@ pb.update_results(check)
 
 ### Logging
 
-**PingdomBackup** uses Python's built-in logging facilities. The logger name is `PingdomBackup`. You can hook into PingdomBackup's log statements to get some idea as to what is going on in the background.
+PingdomBackup uses Python's built-in logging facilities. The logger name is `PingdomBackup`. You can hook into PingdomBackup's log statements to get some idea as to what is going on in the background.
+
+Coincidentally, `logging.INFO` is used for the console tool's `--verbose` option.
 
 ```python
 import logging
@@ -80,4 +84,39 @@ logger = logging.getLogger('PingdomBackup')
 logger.setLevel(logging.DEBUG)
 
 pb.update_results(check)
+```
+
+### Fetching results
+
+The `Database` convenience class is made available so fetching data from the SQLite database is a jiffy.
+
+```python
+import sqlite3
+from datetime import datetime
+
+from pingdombackup import Database
+
+# get all "up" or "down" records
+db = Database('pingdom.db')
+records = db.get_records('results', where='status IN (?, ?)', order_by='time ASC', parameters=('down', 'up'))
+
+# find status changes
+current_status = None
+current_start = None
+for record in records:
+    # convert to Python datetime
+    time = datetime.fromtimestamp(record['time'])
+    if current_status == None:
+        current_status = record['status']
+        current_start = time
+    elif record['status'] != current_status:
+        # report the status change and duration
+        print('{0}: {1} -> {2} ({1}-time: {3})'.format(
+            time,
+            current_status,
+            record['status'],
+            time - current_start)
+        )
+        current_status = record['status']
+        current_start = time
 ```
