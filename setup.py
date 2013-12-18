@@ -1,9 +1,10 @@
 import sys
 from setuptools import setup
+from pingdombackup import __version__
 
 setup(
     name='PingdomBackup',
-    version='0.1.0',
+    version=__version__,
     description='Backup Pingdom logs',
     long_description='Backup Pingdom result logs to a SQLite database.',
     author='Joel Verhagen',
