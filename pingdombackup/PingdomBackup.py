@@ -31,10 +31,7 @@ class PingdomBackup:
             self.database.upsert_record('checks', check)
         log.info('{0} {1} updated.'.format(len(checks), 'check was' if len(checks) == 1 else 'checks were'))
 
-    def get_check_by_name(self, name, from_api=True):
-        if from_api:
-            self.update_checks()
-
+    def get_check_by_name(self, name):
         return self.database.get_record('checks', where='name = ?', parameters=(name, ))
 
     def update_results(self, check):
@@ -77,5 +74,5 @@ class PingdomBackup:
 
         # bulk insert
         all_results = sorted(all_results, key=lambda r: r['time'])
-        log.info('{0} new {1} been found.'.format(len(all_results), 'record has' if len(all_results) == 1 else 'records have'))
+        log.info('{0} new {1} been found.'.format(len(all_results), 'result has' if len(all_results) == 1 else 'results have'))
         self.database.insert_records('results', all_results)
