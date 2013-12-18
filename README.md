@@ -10,13 +10,51 @@ This library is easily accessible using **pip**:
 pip install pingdombackup
 ```
 
-## Example
+## Console Usage
 
-This example does three things:
+This package includes a script for easy command-line usage. It is installed to your Python `scripts` directory. This depends on your system.
+
+```
+pingdombackup --help
+
+usage: pingdombackup [-h] [-v] -e EMAIL -p PASSWORD -a APP_KEY [-d DB_PATH]
+                     [-n CHECK_NAME] [--offine-check] [--no-update-results]
+                     [--update-probes] [--update-checks] [--verbose]
+
+Backup Pingdom result logs to a SQLite database.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show the version and exit (default: False)
+  -e EMAIL, --email EMAIL
+                        your Pingdom email address (used for logging in)
+  -p PASSWORD, --password PASSWORD
+                        your Pingdom password (used for logging in)
+  -a APP_KEY, --app-key APP_KEY
+                        a valid Pingdom API application key, see:
+                        https://my.pingdom.com/account/appkeys
+  -d DB_PATH, --db-path DB_PATH
+                        a path to the SQLite database used for storage
+                        (default: pingdom.db)
+  -n CHECK_NAME, --check-name CHECK_NAME
+                        the name of the check to update (default: None)
+  --offine-check        get the check ID by name from the database, instead of
+                        the Pingdom API (default: False)
+  --no-update-results   do not update the results for the specified check
+                        (default: False)
+  --update-probes       update the probes (default: False)
+  --update-checks       update the checks for your account (default: False)
+  --verbose             trace progress (default: False)
+```
+
+## Script Usage
+
+This example does four things:
 
 1. Updates the `probes` table (which is a persisted record of the `/probes` endpoint).
-2. Gets a check record with the specified name.
-3. Downloads all of the results on the specific check record.
+2. Updates the `checks` tabls (which is a persisted record of the `/checks` endpoint).
+3. Gets a check record with the specified name from the local database.
+4. Downloads all of the results on the specific check record.
 
 ```python
 from pingdombackup import PingdomBackup
@@ -27,6 +65,7 @@ app_key = 'your API key'
 
 pb = PingdomBackup(email, password, app_key, 'pingdom.db')
 pb.update_probes()
+pn.update_checks()
 check = pb.get_check_by_name('your check name')
 pb.update_results(check)
 ```
