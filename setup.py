@@ -13,6 +13,7 @@ setup(
     url='https://github.com/joelverhagen/PingdomBackup',
     packages=['pingdombackup'],
     license='MIT',
+    entry_points=dict(console_scripts=['pingdombackup = pingdombackup:tool_main']),
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
