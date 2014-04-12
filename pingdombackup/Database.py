@@ -25,7 +25,9 @@ class Database:
             ('status', 'TEXT'),
             ('resolution', 'INTEGER'),
             ('hostname', 'TEXT'),
-            ('created', 'INTEGER')
+            ('created', 'INTEGER'),
+            ('use_legacy_notifications', 'BOOL'),
+
         )),
         ('results', (
             ('id', 'INTEGER PRIMARY KEY'),
