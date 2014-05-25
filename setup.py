@@ -1,8 +1,17 @@
 import sys
-from setuptools import setup
-from pingdombackup import __version__
+import re
+import setuptools
 
-setup(
+# detect the version, without an import
+VERSION_FILE = 'pingdombackup/__init__.py'
+version_contents = open(VERSION_FILE).read()
+version_match = re.search(r'__version__\s*=\s*\'(.+?)\'', version_contents)
+if version_match is None:
+	__version__ = 'UNKNOWN'
+else:
+	__version__ = version_match.group(1)
+
+setuptools.setup(
     name='PingdomBackup',
     version=__version__,
     description='Backup Pingdom logs',
